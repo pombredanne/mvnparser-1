@@ -41,7 +41,7 @@ func (mp *MavenProject)  AddSubModules(subModule *MavenProject) {
 	mp.modules = append(mp.modules, subModule)
 }
 
-func (mp *MavenProject) isNeededToBuild() bool {
+func (mp *MavenProject) IsNeededToBuild() bool {
 	if mp.Packaging != "" && mp.Packaging != "pom" && mp.Build.FinalName != "" {
 		return true
 	}
