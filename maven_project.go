@@ -10,9 +10,9 @@ import (
 
 // Represent a POM file
 type MavenProject struct {
-	XMLName      xml.Name     `xml:"project"`
+	XMLName      *xml.Name     `xml:"project"`
 	ModelVersion string       `xml:"modelVersion"`
-	Parent	     Parent		  `xml:"parent"`
+	Parent	     *Parent		  `xml:"parent"`
 	GroupId      string       `xml:"groupId"`
 	ArtifactId   string       `xml:"artifactId"`
 	Version      string       `xml:"version"`
@@ -20,7 +20,7 @@ type MavenProject struct {
 	Name         string       `xml:"name"`
 
 	Modules      []string     `xml:"modules>module"`
-	Build        Build                `xml:"build"`
+	Build        *Build                `xml:"build"`
 
 	RelativePath string      `xml:"-"`
 	modules      []*MavenProject `xml:"-"`
