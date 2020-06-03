@@ -50,29 +50,35 @@ func (mp *MavenProject) IsNeededToBuild() bool {
 
 type WalkFunc func(project *MavenProject)
 func (mp *MavenProject) WalkMavenProject(wf WalkFunc) {
+	wf(mp)
 	if len(mp.modules) != 0 {
 		for _, m := range mp.modules {
 			m.WalkMavenProject(wf)
 		}
 	}
-	wf(mp)
 }
 
-func NewMavenProject(root string) *MavenProject {
-	data,err:=ioutil.ReadFile(filepath.Join(root, "pom.xml"))
-	if err != nil {
-		panic(errors.New(fmt.Sprintf("%s at root: %s", err, root)))
+func NewMavenProject(relativePath, version string) *MavenProject {
+	mp := &MavenProject{
+		RelativePath: relativePath,
 	}
 
-	mp := new(MavenProject)
-	mp.RelativePath = root
+	// 加载pom文件到mp
+	data,err:=ioutil.ReadFile(filepath.Join(relativePath, "pom.xml"))
+	if err != nil {
+		panic(errors.New(fmt.Sprintf("%s at relativePath: %s", err, relativePath)))
+	}
 	if err:=xml.Unmarshal(data, mp);err!=nil {
 		panic(err)
 	}
 
+	if mp.Version == "" {
+		mp.Version = version
+	}
+
 	if len(mp.Modules) != 0 {
 		for _, m := range mp.Modules {
-			mp.AddSubModules(NewMavenProject(filepath.Join(root, m)))
+			mp.AddSubModules(NewMavenProject(filepath.Join(relativePath, m), mp.Version))
 		}
 	}
 
