@@ -35,6 +35,15 @@ type Parent struct {
 
 type Build struct {
 	FinalName string `xml:"finalName"`
+	Plugins   []*Plugin `xml:plugins>plugin`
+}
+
+type Plugin struct {
+	Configuration *Configuration `xml:"configuration"`
+}
+
+type Configuration struct {
+	MainClass string `xml:"mainClass"`
 }
 
 func (mp *MavenProject)  AddSubModules(subModule *MavenProject) {
