@@ -35,7 +35,7 @@ type Parent struct {
 
 type Build struct {
 	FinalName string `xml:"finalName"`
-	Plugins   []*Plugin `xml:plugins>plugin`
+	Plugins   []*Plugin `xml:"plugins>plugin"`
 }
 
 type Plugin struct {
