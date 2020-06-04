@@ -51,8 +51,18 @@ func (mp *MavenProject)  AddSubModules(subModule *MavenProject) {
 }
 
 func (mp *MavenProject) IsNeededToBuild() bool {
-	if mp.Packaging != "" && mp.Packaging != "pom" && mp.Build.FinalName != "" {
+	if mp.Packaging == "pom" && len(mp.Modules)>0 {
 		return true
+	}
+	if mp.Packaging == "war" && mp.Build != nil && mp.Build.FinalName != "" {
+		return true
+	}
+	if mp.Packaging == "jar" && mp.Build != nil && len(mp.Build.Plugins)>0 {
+		for _, p := range mp.Build.Plugins {
+			if p.Configuration != nil &&  p.Configuration.MainClass != "" {
+				return true
+			}
+		}
 	}
 	return false
 }
