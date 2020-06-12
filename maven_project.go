@@ -44,6 +44,11 @@ type Plugin struct {
 
 type Configuration struct {
 	MainClass string `xml:"mainClass"`
+	Archive struct{
+		Manifest struct{
+			MainClass string `xml:"mainClass"`
+		} `xml:"manifest"`
+	}	`xml:"archive"`
 }
 
 func (mp *MavenProject)  AddSubModules(subModule *MavenProject) {
@@ -59,7 +64,7 @@ func (mp *MavenProject) IsNeededToBuild() bool {
 	}
 	if mp.Packaging == "jar" && mp.Build != nil && len(mp.Build.Plugins)>0 {
 		for _, p := range mp.Build.Plugins {
-			if p.Configuration != nil &&  p.Configuration.MainClass != "" {
+			if p.Configuration.MainClass != "" || p.Configuration.Archive.Manifest.MainClass != "" {
 				return true
 			}
 		}
