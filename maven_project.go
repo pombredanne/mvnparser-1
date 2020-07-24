@@ -66,9 +66,12 @@ func (mp *MavenProject) IsNeededToBuild() bool {
 	}
 	if mp.Packaging == "jar" && mp.Build != nil && len(mp.Build.Plugins)>0 {
 		for _, p := range mp.Build.Plugins {
-			if p.Configuration.MainClass != "" || p.Configuration.Archive.Manifest.MainClass != "" {
-				return true
+			if p.Configuration != nil {
+				if p.Configuration.MainClass != "" || p.Configuration.Archive.Manifest.MainClass != "" {
+					return true
+				}
 			}
+
 			if p.GroupId == "org.springframework.boot" && p.ArtifactId == "spring-boot-maven-plugin" {
 				return true
 			}
