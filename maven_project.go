@@ -58,6 +58,11 @@ func (mp *MavenProject)  AddSubModules(subModule *MavenProject) {
 }
 
 func (mp *MavenProject) IsNeededToBuild() bool {
+	// 设定默认值
+	if mp.Packaging == "" {
+		mp.Packaging = "jar"
+	}
+
 	if mp.Packaging == "pom" && len(mp.Modules)>0 {
 		return true
 	}
